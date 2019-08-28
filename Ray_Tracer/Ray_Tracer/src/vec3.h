@@ -45,6 +45,11 @@ public:
 
 };
 
+void vec3::make_unit_vector() {
+	(*this) /= length();
+	return;
+}
+
 vec3::vec3(const vec3& vecIn)
 {
 	e[0] = vecIn[0];

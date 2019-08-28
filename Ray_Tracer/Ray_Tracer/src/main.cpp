@@ -5,7 +5,7 @@
 #include "ray.h"
 using namespace std;
 
-vec3 giveFadeBlueDownward(const ray& r) {
+inline vec3 giveFadeBlueDownward(const ray& r) {
 	//goal color is vec3(.5, .7, 1.0)	//blue
 	//start is white(1,1,1)
 	//r's original y val goes from -1, 1
@@ -16,31 +16,44 @@ vec3 giveFadeBlueDownward(const ray& r) {
 	return lerp(vec3(1.0f, 1.0f, 1.0f), vec3(0.5f, 0.7f, 1.0f), t);
 }
 
-vec3 getSphereHitVec(ray& r, vec3& center, float radius) {
+inline void print(vec3 in) {
+	cout << in[0] << " " << in[1] << " " << in[2] << '\n';
+	return;
+}
+int printCount = 20;
+
+inline vec3 getSphereHitVec(ray& r, vec3& center, float radius) {
 
 	vec3 relSphereLoc(center - r.origin());
 	vec3 look( unit_vector(r.direction()) );
 
 	float dist = dot( relSphereLoc, look );
-	if (dist > radius) { //basic collision is found
-		return vec3(0, 0, 0);
-	}
-	//how to get normal vec
-		//scale look to sqrt(radius^2 - dist^2)
-		//scale radius to dist
-		//normal = radius+look
-
 
 	look *= dist;
-	//(relSphereLoc - look) gives us a vector perpendicular to our ray toward our sphere center
-	vec3 sRadius(relSphereLoc - look);
-	if (sRadius.length() > radius) {
+	//(look - relSphereLoc) gives us a vector perpendicular to our ray, from our sphere center
+	vec3 perpendic(look - relSphereLoc);
+	if (perpendic.length() > radius) {
 		return vec3(0, 0, 0);
 	}
-	return sRadius;
 
+	//how to get normal vec
+		//scale look to sqrt(radius^2 - perpendic.length()^2)
+		//normal = perpendic+look
+
+	dist = perpendic.length();
+	look.make_unit_vector();
+	look = (-look);
+
+	look *= sqrt((radius*radius) - (dist*dist));
+
+	return (perpendic + look);	//return normal;
 }
 
+
+void testVecFuncs() {
+	vec3 temp(1, 1, 1);
+
+}
 
 int main() {
 	/*
@@ -143,6 +156,9 @@ int main() {
 	}
 	*/
 	image.close();
+	if (printCount < 20) {
+		cin >> xPercent;
+	}
 	return 0;
 }
 

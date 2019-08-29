@@ -18,10 +18,10 @@ inline vec3 giveFadeBlueDownward(const ray& r) {
 }
 
 inline void print(vec3 in) {
-	cout << in[0] << " " << in[1] << " " << in[2] << '\n';
+	cout << "("<<in[0] << ", " << in[1] << ", " << in[2] <<")"<< '\n';
 	return;
 }
-int printCount = 20;
+int printCount = 41;
 
 inline vec3 getSphereHitVec(ray& r, vec3& center, float radius) {
 
@@ -55,7 +55,7 @@ vec3 color(const ray& r, hitable *world) {
 	hit_record rec;
 
 	vec3 col;// = getSphereHitVec(r, sphereLoc, 0.5f);
-	if (world->hit(r, 0.0, 0.0, rec)) {		//TODO: include float.h & init this with MAXFLOAT
+	if (world->hit(r, 0.0, 2000.0, rec)) {		//TODO: include float.h & init this with MAXFLOAT
 		col = 0.5 * vec3(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
 		//or nothing, comment this entire else out
 		return col;
@@ -69,6 +69,29 @@ vec3 color(const ray& r, hitable *world) {
 
 int main() {
 
+	//collision debugging
+	/*
+	vec3 center(0, -100, -1);
+	ray r(vec3(0,0,0), vec3(-2, 0.48, -1));
+	vec3 perpendic(18, 96, 10);
+	//vec3 look(18, -4, 9);
+	vec3 look(unit_vector(r.direction()));
+
+	float dist = abs(dot(center, look));
+	
+	cout << "dist: " << dist << '\n';
+
+	look *= dist;
+	cout << "look: ";
+	print(look);
+	//(look - relSphereLoc) gives us a vector perpendicular to our ray, from our sphere center
+	perpendic=(look - center);
+	if (perpendic.length() < 100.0f) {
+		cout << "HIT!" << '\n';
+		//return vec3(0, 0, 0);
+	}
+	*/
+
 	ofstream image;
 	image.open("testPPM.ppm");
 
@@ -81,10 +104,10 @@ int main() {
 
 	///give background fade white to blue upward
 
-	//our coordinate system plane of pixels
-	//x goes from -2 to 2
-	//y goes from -1 to 1
-	//z is set at -1
+	//pixel coordinates
+		//x goes from 0 to 4
+		//y goes from 0 to 2
+		//z is set at -1
 	vec3 lower_left_corner(-2.0f, -1.0f, -1.0);
 	vec3 horizontal(4.0f, 0.0f, 0.0f);
 	vec3 vertical(0.0f, 2.0f, 0.0f);
@@ -95,11 +118,12 @@ int main() {
 	float xPercent;
 	float yPercent;
 
-	hitable *list[1];
-	list[0] = new sphere(vec3(0, 0, -1), 0.5f);
-	//list[1] = new sphere(vec3(0, -100.5f, -1), 100.0f);
+	hitable *list[2];
+	list[1] = new sphere(vec3(0, 0.0f, -1), 0.5f);
+	list[0] = new sphere(vec3(0, -100.5f, -1), 100.0f);
+	//list[1] = new sphere(vec3(0.5, 0.0f, -1), 0.5f);
 
-	hitable* world = new hitable_list(list, 1);
+	hitable* world = new hitable_list(list, 2);
 
 	vec3 sphereLoc(0.0f, 0.0f, -1.0f);
 
@@ -115,6 +139,10 @@ int main() {
 			ir = int(255.99f * col[0]);
 			ig = int(255.99f * col[1]);
 			ib = int(255.99f * col[2]);
+			if (printCount > 0) {
+				//cout << ir << " " << ig << " " << ib << '\n';
+				printCount--;
+			}
 			image << ir << " " << ig << " " << ib << '\n';
 		}
 	}
@@ -123,6 +151,7 @@ int main() {
 	if (printCount < 20) {
 		cin >> xPercent;
 	}
+	cin >> xPercent;
 	return 0;
 }
 

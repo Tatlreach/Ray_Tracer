@@ -12,6 +12,7 @@ public:
 		list_size = l_size;
 	};
 	virtual bool hit(const ray& r, float dist_min, float dist_max, hit_record& rec) const;	///calls hit for all in the list
+	virtual bool hit2(const ray& r, float dist_min, float dist_max, hit_record& rec) const;	///calls hit for all in the list
 };
 
 ///author's version of iterating the hitable_list
@@ -33,10 +34,10 @@ bool hitable_list::hit(const ray& r, float dist_min, float dist_max, hit_record&
 	}
 
 	return has_hit;
-
-
 }
-
+bool hitable_list::hit2(const ray& r, float dist_min, float dist_max, hit_record& rec) const {
+	return hit(r, dist_min, dist_max, rec);
+}
 ///my version of iterating the hitable_list
 /*
 bool hitable_list::hit(const ray& r, float dist_min, float dist_max, hit_record& rec) {

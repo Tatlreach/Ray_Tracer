@@ -15,5 +15,5 @@ public:
 
 	vec3 origin() const { return A; }
 	vec3 direction() const { return B; }
-	vec3 point_at_param(float t) const { return A + (t*B); }
+	vec3 point_at_parameter(float dist) const { return A + (dist*B); }	//traces ray to end, scales direction by t
 };

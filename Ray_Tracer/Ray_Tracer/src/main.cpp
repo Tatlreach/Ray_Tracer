@@ -2,7 +2,8 @@
 
 // basic file operations
 #include <fstream>
-#include "ray.h"
+#include "sphere.h"
+#include "hitable_list.h"
 using namespace std;
 
 inline vec3 giveFadeBlueDownward(const ray& r) {
@@ -50,18 +51,23 @@ inline vec3 getSphereHitVec(ray& r, vec3& center, float radius) {
 }
 
 
-void testVecFuncs() {
-	vec3 temp(1, 1, 1);
+vec3 color(const ray& r, hitable *world) {
+	hit_record rec;
 
+	vec3 col;// = getSphereHitVec(r, sphereLoc, 0.5f);
+	if (world->hit(r, 0.0, 0.0, rec)) {		//TODO: include float.h & init this with MAXFLOAT
+		col = 0.5 * vec3(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
+		//or nothing, comment this entire else out
+		return col;
+	}
+	else {
+		col = giveFadeBlueDownward(r);
+	}
+	return col;
 }
 
+
 int main() {
-	/*
-	ofstream myImageFile;
-	myImageFile.open("example.txt");
-	myImageFile << "Writing this to a file.\n";
-	myImageFile.close();
-	*/
 
 	ofstream image;
 	image.open("testPPM.ppm");
@@ -89,6 +95,12 @@ int main() {
 	float xPercent;
 	float yPercent;
 
+	hitable *list[1];
+	list[0] = new sphere(vec3(0, 0, -1), 0.5f);
+	//list[1] = new sphere(vec3(0, -100.5f, -1), 100.0f);
+
+	hitable* world = new hitable_list(list, 1);
+
 	vec3 sphereLoc(0.0f, 0.0f, -1.0f);
 
 	for (int i = height - 1; i >= 0; i--) {
@@ -96,16 +108,10 @@ int main() {
 			xPercent = float(j) / fWidth;
 			yPercent = float(i) / fHeight;
 			
-			ray r(origin, lower_left_corner + (xPercent * horizontal) + (yPercent * vertical));
-			vec3 col = getSphereHitVec(r, sphereLoc, 0.5f);
-			if (col == vec3(0,0,0)) {
-				col = giveFadeBlueDownward(r);
-			}
-			else {
-				vec3 N = unit_vector(r.point_at_param(col.length()) - sphereLoc);
-				col = 0.5 * vec3(N.x() + 1, N.y() + 1, N.z() + 1);
-				//or nothing, comment this entire else out
-			}
+			ray r(origin, lower_left_corner + (xPercent*horizontal) + (yPercent*vertical));
+
+			vec3 col = color(r, world);
+
 			ir = int(255.99f * col[0]);
 			ig = int(255.99f * col[1]);
 			ib = int(255.99f * col[2]);
@@ -113,48 +119,6 @@ int main() {
 		}
 	}
 
-	/*
-	float r, g, b;
-	b = 0.2f;
-
-	
-	///loop through colors, write to file
-
-	for (int i = height - 1; i >= 0; i--) {
-		for (int j = 0; j < width; j++) {
-			ir = int(255.99 * (float(j) / wFloat));
-			ig = int(255.99 * (float(i) / hFloat));
-			ib = int(255.99 * b);
-			image << ir << " " << ig << " " << ib << '\n';
-		}
-	}
-	*/
-
-	/*
-	for (int i = height-1; i >= 0; i--) {
-		for (int j = 0; j < width; j++) {
-			ir = int(255.99 * (float(j) / wFloat));
-			ig = int(255.99 * (float(i) / hFloat));
-			ib = int(255.99 * b);
-			image << ir << " " << ig << " " << ib << '\n';
-		}
-	}
-	*/
-	/*
-	for (int j = height - 1; j >= 0; j--) {
-		for (int i = 0; i < width; i++) {
-			float r = float(i) / float(width);
-			float g = float(j) / float(height);
-			float b = 0.2f;
-
-			int ir = int(255.99 * r);
-			int ig = int(255.99 * g);
-			int ib = int(255.99 * b);
-			image << ir << " " << ig << " " << ib << '\n';
-
-		}
-	}
-	*/
 	image.close();
 	if (printCount < 20) {
 		cin >> xPercent;

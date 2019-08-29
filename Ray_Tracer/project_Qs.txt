@@ -13,3 +13,5 @@ project sVec onto unit ray.dirction, dot(sVec,ray.direction)
 scale ray.direction by this dot product, edgeVec
 edgeVec-sVec gives vector from sphere center outward, radiusVec
 if( radiusVec.length() < R^3 ) it's a collision
+
+virtual bool func() const = 0;	//pure virtual function

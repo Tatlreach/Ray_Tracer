@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h>
+//#include <random>
 
 class vec3 {
 public:
@@ -32,6 +33,8 @@ public:
 
 	inline vec3& operator*=(const float t);
 	inline vec3& operator/=(const float t);
+	inline vec3& operator-=(const float t);
+	inline vec3& operator+=(const float t);
 
 	inline float length() {
 		//return sqrt(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]);
@@ -42,7 +45,6 @@ public:
 	}
 
 	void make_unit_vector();
-
 };
 
 void vec3::make_unit_vector() {
@@ -167,4 +169,40 @@ inline vec3& vec3::operator/=(const float t)
 	e[1] /= t;
 	e[2] /= t;
 	return *this;
+}
+
+inline vec3& vec3::operator-=(const float t)
+{
+	e[0] -= t;
+	e[1] -= t;
+	e[2] -= t;
+	return *this;
+}
+
+inline vec3 random_in_sphere(float radius_max=1.0f) {
+	//gen a vector with randomized vals -radius to radius
+	//make sure it's a sphere
+	//add it to vector
+	vec3 rand_sphere;
+	do {
+		rand_sphere = vec3(float(rand()) / float(RAND_MAX), float(rand()) / float(RAND_MAX), float(rand()) / float(RAND_MAX));
+		rand_sphere -= 0.5f;
+		rand_sphere *= 2.0f*radius_max;
+	} while (rand_sphere.length() > radius_max);
+	return rand_sphere;
+}
+
+inline vec3 random_in_sphere2(float radius_max = 1.0f) {
+
+	//gen a vector with randomized vals -radius to radius
+	//make sure it's a sphere
+	//add it to vector
+	vec3 rand_sphere;
+	do {
+		rand_sphere = vec3(float(rand()) / float(RAND_MAX), float(rand()) / float(RAND_MAX), float(rand()) / float(RAND_MAX));
+		//rand_sphere = vec3(dist(e2), dist(e2), dist(e2));
+		rand_sphere *= 2.0f;
+		rand_sphere -= vec3(1, 1, 1);
+	} while (rand_sphere.length() > radius_max);
+	return rand_sphere;
 }

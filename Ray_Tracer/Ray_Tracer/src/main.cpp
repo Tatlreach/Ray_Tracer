@@ -6,6 +6,8 @@
 #include "hitable_list.h"
 #include "camera.h"
 #include <time.h>
+#include "lambertian.h"
+#include "metal.h"
 using namespace std;
 
 inline vec3 giveFadeBlueDownward(const ray& r) {
@@ -29,16 +31,16 @@ int printCount = 41;
 vec3 color(const ray& r, hitable *world) {
 	hit_record rec;
 
-	vec3 col;// = getSphereHitVec(r, sphereLoc, 0.5f);
-	if (world->hit(r, 0.0, 2000.0, rec)) {		//TODO: include float.h & init this with MAXFLOAT
-		col = 0.5 * vec3(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
-		//or nothing, comment this entire else out
-		return col;
+	if (world->hit(r, 0.001, 20000.0, rec)) {		//TODO: include float.h & init this with MAXFLOAT
+		
+		//target = 0.5 * vec3(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
+		vec3 reflected_end( rec.p + rec.normal + random_in_sphere() );
+		//.5 is the absorbtion level
+		return 0.5*color( ray( rec.p, reflected_end-rec.p), world);
 	}
 	else {
-		col = giveFadeBlueDownward(r);
+		return giveFadeBlueDownward(r);
 	}
-	return col;
 }
 
 
@@ -76,7 +78,7 @@ int main() {
 	float fHeight = float(height);
 
 	camera view;
-	int sampleCount = 8;
+	int sample_count = 64;
 	srand((unsigned int)time(NULL));
 
 	int ir, ig, ib;
@@ -93,25 +95,29 @@ int main() {
 	float xPercent;
 	float yPercent;
 
-	hitable *list[2];
-	list[1] = new sphere(vec3(0, 0.0f, -1), 0.5f);
-	list[0] = new sphere(vec3(0, -100.5f, -1), 100.0f);
-	//list[1] = new sphere(vec3(0.5, 0.0f, -1), 0.5f);
-	int randShown = 15;
-	hitable* world = new hitable_list(list, 2);
+	hitable *list[4];
+	list[0] = new sphere( vec3(0, 0.0f, -1), 0.5f, new lambertian(vec3(0.8f, 0.3f, 0.3f)) );
+	list[1] = new sphere( vec3(0, -100.5f, -1), 100.0f, new lambertian(vec3(0.8f, 0.8f, 0.0f)) );
+
+	list[2] = new sphere(vec3(1, 0, -1), 0.5f, new metal(vec3(0.8f, 0.6f, 0.2f)));
+	list[3] = new sphere(vec3(-1, 0, -1), 0.5f, new metal(vec3(0.8f, 0.8f, 0.8f)));
+	hitable* world = new hitable_list(list, 4);
+
 	for (int i = height - 1; i >= 0; i--) {
 		for (int j = 0; j < width; j++) {
 			vec3 col = vec3(0, 0, 0);
-			for (int s = 0; s < sampleCount; s++) {
+			for (int s = 0; s < sample_count; s++) {
 				xPercent = (float(j) + float(rand())/float(RAND_MAX) ) / fWidth;
 				yPercent = (float(i) + float(rand())/float(RAND_MAX) ) / fHeight;
+				//xPercent = (float(j) + dist(e2)) / fWidth;
+				//yPercent = (float(i) + dist(e2)) / fHeight;
 
 				//xPercent = (float(j)) / fWidth;
 				//yPercent = (float(i)) / fHeight;
 				ray r = view.get_ray(xPercent, yPercent);
 				col += color(r, world);
 			}
-			col /= sampleCount;
+			col /= sample_count;
 
 
 			ir = int(255.99f * col[0]);

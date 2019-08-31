@@ -3,17 +3,17 @@
 #include "hitable.h"
 //#include <iostream>
 //#include <fstream>
+class material;
 
 class sphere : public hitable {
 public:
 	//std::ofstream vecLog;
 	vec3 center;
 	float radius;
-	int printCount = 10;
-	int printInterval = 20;
+	material* mat;
 
 	sphere() {}
-	sphere(vec3 cen, float r) : center(cen), radius(r) {};
+	sphere(vec3 cen, float r, material* mat_in) : center(cen), radius(r), mat(mat_in) {};
 
 	virtual bool hit(const ray& r, float dist_min, float dist_max, hit_record& rec) const;
 	virtual bool hit2(const ray& r, float dist_min, float dist_max, hit_record& rec) const;
@@ -26,6 +26,7 @@ bool sphere::hit(const ray& r, float dist_min, float dist_max, hit_record& rec) 
 	vec3 look( unit_vector(r.direction()) );
 
 	float dist = abs(dot(relSphereLoc, look));
+	if ((dist < dist_min) || (dist > dist_max)) return false;
 
 	look *= dist;
 	//(look - relSphereLoc) gives us a vector perpendicular to our ray, from our sphere center
@@ -67,7 +68,6 @@ bool sphere::hit(const ray& r, float dist_min, float dist_max, hit_record& rec) 
 	if ((dist_min > (dist - hit_dist_from_perpendic)) || ((dist - hit_dist_from_perpendic) > dist_max) ) {
 		return false;
 	}*/
-
 	rec.dist = dist - hit_dist_from_perpendic;	///get distance from ray origin to sphere surface
 
 	look.make_unit_vector();

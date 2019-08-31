@@ -1,12 +1,14 @@
 #pragma once
 
 #include "ray.h"
+class material;
 
 struct hit_record {
 public:
 	float dist;	//direction distance  //dist from origin to sphere surface
 	vec3 p;		//coordinate of collision
 	vec3 normal;
+	material *mat;
 };
 
 class hitable {

@@ -78,6 +78,7 @@ bool sphere::hit(const ray& r, float dist_min, float dist_max, hit_record& rec) 
 	rec.p = (center + rec.normal);
 
 	rec.normal.make_unit_vector();
+	rec.mat = mat;
 	return true;
 	//return (perpendic + look);	//return normal;	//return rec.normal;
 }

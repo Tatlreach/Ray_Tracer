@@ -6,6 +6,7 @@
 #include "hitable_list.h"
 #include "camera.h"
 #include <time.h>
+#include "material.h"
 #include "lambertian.h"
 #include "metal.h"
 using namespace std;
@@ -28,15 +29,17 @@ inline void print(vec3 in) {
 int printCount = 41;
 
 
-vec3 color(const ray& r, hitable *world) {
+vec3 color(const ray& r, hitable *world, int reflects_left=25) {
 	hit_record rec;
 
 	if (world->hit(r, 0.001, 20000.0, rec)) {		//TODO: include float.h & init this with MAXFLOAT
+		vec3 attenuation;
+		ray scatter;
+		if ((reflects_left>0) && rec.mat->scatter(r, rec, attenuation, scatter)) {
+			return attenuation * color(scatter, world, reflects_left - 1);
+		}
+		return vec3(0, 0, 0);
 		
-		//target = 0.5 * vec3(rec.normal.x() + 1, rec.normal.y() + 1, rec.normal.z() + 1);
-		vec3 reflected_end( rec.p + rec.normal + random_in_sphere() );
-		//.5 is the absorbtion level
-		return 0.5*color( ray( rec.p, reflected_end-rec.p), world);
 	}
 	else {
 		return giveFadeBlueDownward(r);
@@ -77,7 +80,7 @@ int main() {
 	float fWidth = float(width);
 	float fHeight = float(height);
 
-	camera view;
+	camera cam;
 	int sample_count = 64;
 	srand((unsigned int)time(NULL));
 
@@ -114,7 +117,7 @@ int main() {
 
 				//xPercent = (float(j)) / fWidth;
 				//yPercent = (float(i)) / fHeight;
-				ray r = view.get_ray(xPercent, yPercent);
+				ray r = cam.get_ray(xPercent, yPercent);
 				col += color(r, world);
 			}
 			col /= sample_count;

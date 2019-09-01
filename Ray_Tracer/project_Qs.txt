@@ -15,3 +15,5 @@ edgeVec-sVec gives vector from sphere center outward, radiusVec
 if( radiusVec.length() < R^3 ) it's a collision
 
 virtual bool func() const = 0;	//pure virtual function
+
+he forgot to set the rec.mat after getting a hit in book

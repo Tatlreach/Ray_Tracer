@@ -192,7 +192,7 @@ inline vec3 random_in_sphere(float radius_max=1.0f) {
 	return rand_sphere;
 }
 
-inline vec3 random_in_sphere2(float radius_max = 1.0f) {
+inline vec3 random_in_sphere2() {
 
 	//gen a vector with randomized vals -radius to radius
 	//make sure it's a sphere
@@ -203,6 +203,6 @@ inline vec3 random_in_sphere2(float radius_max = 1.0f) {
 		//rand_sphere = vec3(dist(e2), dist(e2), dist(e2));
 		rand_sphere *= 2.0f;
 		rand_sphere -= vec3(1, 1, 1);
-	} while (rand_sphere.length() > radius_max);
+	} while (rand_sphere.length() > 1.0f);
 	return rand_sphere;
 }

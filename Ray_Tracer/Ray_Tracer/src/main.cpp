@@ -9,6 +9,7 @@
 #include "material.h"
 #include "lambertian.h"
 #include "metal.h"
+#include "dielectric.h"
 using namespace std;
 
 inline vec3 giveFadeBlueDownward(const ray& r) {
@@ -32,7 +33,7 @@ int printCount = 41;
 vec3 color(const ray& r, hitable *world, int reflects_left=25) {
 	hit_record rec;
 
-	if (world->hit(r, 0.001, 20000.0, rec)) {		//TODO: include float.h & init this with MAXFLOAT
+	if (world->hit_author(r, 0.001, 20000.0, rec)) {		//TODO: include float.h & init this with MAXFLOAT
 		vec3 attenuation;
 		ray scatter;
 		if ((reflects_left>0) && rec.mat->scatter(r, rec, attenuation, scatter)) {
@@ -103,7 +104,7 @@ int main() {
 	list[1] = new sphere( vec3(0, -100.5f, -1), 100.0f, new lambertian(vec3(0.8f, 0.8f, 0.0f)) );
 
 	list[2] = new sphere(vec3(1, 0, -1), 0.5f, new metal(vec3(0.8f, 0.6f, 0.2f), 1.0f));
-	list[3] = new sphere(vec3(-1, 0, -1), 0.5f, new metal(vec3(0.8f, 0.8f, 0.8f), 0.3f));
+	list[3] = new sphere(vec3(-1, 0, -1), 0.5f, new dielectric(1.5));
 	hitable* world = new hitable_list(list, 4);
 
 	for (int i = height - 1; i >= 0; i--) {

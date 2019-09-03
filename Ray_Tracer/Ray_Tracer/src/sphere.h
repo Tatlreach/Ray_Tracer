@@ -16,7 +16,7 @@ public:
 	sphere(vec3 cen, float r, material* mat_in) : center(cen), radius(r), mat(mat_in) {};
 
 	virtual bool hit(const ray& r, float dist_min, float dist_max, hit_record& rec) const;
-	virtual bool hit2(const ray& r, float dist_min, float dist_max, hit_record& rec) const;
+	virtual bool hit_author(const ray& r, float dist_min, float dist_max, hit_record& rec) const;
 //	virtual vec3 hit_occured(const ray & r) const;
 //	virtual vec3 get_normal(const ray& r, vec3 perpendic, hit_record& rec) const;
 };
@@ -84,7 +84,7 @@ bool sphere::hit(const ray& r, float dist_min, float dist_max, hit_record& rec) 
 }
 
 	///authors version of hit detection
-bool sphere::hit2(const ray& r, float dist_min, float dist_max, hit_record& rec) const {
+bool sphere::hit_author(const ray& r, float dist_min, float dist_max, hit_record& rec) const {
 	vec3 oc = r.origin() - center;
 	float a = dot(r.direction(), r.direction());
 	float b = dot(oc, r.direction());
@@ -92,6 +92,7 @@ bool sphere::hit2(const ray& r, float dist_min, float dist_max, hit_record& rec)
 	float discriminant = b * b - a * c;
 	if (discriminant > 0) {
 		float temp = (-b - sqrt(discriminant)) / a;
+		rec.mat = mat;
 		if (temp < dist_max && temp > dist_min) {
 			rec.dist = temp;
 			rec.p = r.point_at_parameter(rec.dist);

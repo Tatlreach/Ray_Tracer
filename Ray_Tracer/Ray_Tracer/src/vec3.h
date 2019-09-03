@@ -192,7 +192,7 @@ inline vec3 random_in_sphere(float radius_max=1.0f) {
 	return rand_sphere;
 }
 
-inline vec3 random_in_sphere2() {
+inline vec3 random_in_sphere_author() {
 
 	//gen a vector with randomized vals -radius to radius
 	//make sure it's a sphere

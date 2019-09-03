@@ -12,7 +12,7 @@ public:
 		list_size = l_size;
 	};
 	virtual bool hit(const ray& r, float dist_min, float dist_max, hit_record& rec) const;	///calls hit for all in the list
-	virtual bool hit2(const ray& r, float dist_min, float dist_max, hit_record& rec) const;	///calls hit for all in the list
+	virtual bool hit_author(const ray& r, float dist_min, float dist_max, hit_record& rec) const;	///calls hit for all in the list
 };
 
 ///author's version of iterating the hitable_list
@@ -23,7 +23,7 @@ bool hitable_list::hit(const ray& r, float dist_min, float dist_max, hit_record&
 	//loop through hitlist
 		//find the closest hit using generated record
 	for (int i = 0; i < list_size; i++) {
-		if (list[i]->hit(r, dist_min, dist_max, temp_rec)) {
+		if (list[i]->hit_author(r, dist_min, dist_max, temp_rec)) {
 
 			//list[i]->get_normal(r, temp_vec, temp_rec);
 			if (!has_hit || (temp_rec.dist < rec.dist)) {
@@ -35,7 +35,7 @@ bool hitable_list::hit(const ray& r, float dist_min, float dist_max, hit_record&
 
 	return has_hit;
 }
-bool hitable_list::hit2(const ray& r, float dist_min, float dist_max, hit_record& rec) const {
+bool hitable_list::hit_author(const ray& r, float dist_min, float dist_max, hit_record& rec) const {
 	return hit(r, dist_min, dist_max, rec);
 }
 ///my version of iterating the hitable_list

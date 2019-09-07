@@ -17,3 +17,10 @@ if( radiusVec.length() < R^3 ) it's a collision
 virtual bool func() const = 0;	//pure virtual function
 
 he forgot to set the rec.mat after getting a hit in book
+
+Stuff to look
+	Vector Sphere Collision
+	Refract equation
+	Schlick Equation
+	simulating depth of field
+	

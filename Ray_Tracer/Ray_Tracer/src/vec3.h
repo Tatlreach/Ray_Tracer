@@ -45,10 +45,17 @@ public:
 	}
 
 	void make_unit_vector();
+
+	inline void scale_to(const float len);
 };
 
 void vec3::make_unit_vector() {
 	(*this) /= length();
+	return;
+}
+
+void vec3::scale_to(const float len) {
+	(*this) *= (len / length());
 	return;
 }
 

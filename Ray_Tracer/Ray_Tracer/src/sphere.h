@@ -23,56 +23,29 @@ public:
 
 bool sphere::hit(const ray& r, float dist_min, float dist_max, hit_record& rec) const {
 	vec3 relSphereLoc(center - r.origin());
-	vec3 look( unit_vector(r.direction()) );
+	vec3 look(r.direction());
 
 	float dist = abs(dot(relSphereLoc, look));
 	if ((dist < dist_min) || (dist > dist_max)) return false;
 
-	look *= dist;
+	look.scale_to(dist);
 	//(look - relSphereLoc) gives us a vector perpendicular to our ray, from our sphere center
 	vec3 perpendic(look - relSphereLoc);
-	if (perpendic.length() > radius) {
+	float perpendic_len = perpendic.length();
+	if (perpendic_len > radius) {
 		return false;
 		//return vec3(0, 0, 0);
 	}
+	
+	bool is_inside = (relSphereLoc.length() < radius);
 
-	//collision debugging
-	/*
-	if (radius == 100.0f) {
-		//printing first 50 big sphere collisions
-		if (r.direction().y() < 0.5f) {
-			if (((printInterval % 20) == 0) && printCount>0) {
-				vecLog.open("vecLog.txt", std::ios_base::app);
-				//vecLog.open("vecLog.txt");
-				//print
-				vecLog << "center: (" << (int)center[0] << ", " << (int)center[1] << ", " << (int)center[2] << ")\n";
-				vecLog <<"ray: ("<< r.direction()[0] << ", " << r.direction()[1] << ", " << r.direction()[2] << ")\n";
-				vecLog << "perpendic: (" << (int)perpendic[0] << ", " << (int)perpendic[1] << ", " << (int)perpendic[2] << ")\n";
-				vecLog << "look: (" << (int)look[0] << ", " << (int)look[1] << ", " << (int)look[2] << ")\n";
-				vecLog << '\n';
-				vecLog.close();
-				printCount--;
-			}
-			printInterval++;
-		}
-	}*/
+	float surface_dist_from_perpendic = sqrt((radius*radius) - (perpendic_len*perpendic_len));
 
-	//how to get normal vec
-		//scale look to sqrt(radius^2 - perpendic.length()^2)
-		//normal = perpendic+look
+	rec.dist = dist + (float(is_inside * -1)*surface_dist_from_perpendic);	///get distance from ray origin to sphere surface
+	//TODO: if within sphere rec.dist = dist + hit_dist_from_perpendic?
 
-	float hit_dist_from_perpendic = sqrt((radius*radius) - (perpendic.length()*perpendic.length()));
+	look.scale_to(surface_dist_from_perpendic * float(is_inside * -1));
 
-	//check in t_range
-	/*
-	if ((dist_min > (dist - hit_dist_from_perpendic)) || ((dist - hit_dist_from_perpendic) > dist_max) ) {
-		return false;
-	}*/
-	rec.dist = dist - hit_dist_from_perpendic;	///get distance from ray origin to sphere surface
-
-	look.make_unit_vector();
-	look = (-look);
-	look *= hit_dist_from_perpendic;
 	rec.normal = (perpendic + look);	//not unit vector yet
 
 	rec.p = (center + rec.normal);

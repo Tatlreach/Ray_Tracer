@@ -7,7 +7,7 @@ public:
 	float blur;
 
 	//TODO: set a way so blur_in default value removes blur & removes blur computation
-	metal(vec3 a, float blur_in) : albedo(a){
+	metal(vec3 a, float blur_in=1.0f) : albedo(a){
 		if (blur < 1.0f) {
 			blur = blur_in;
 		}

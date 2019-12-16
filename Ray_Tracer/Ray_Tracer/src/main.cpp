@@ -2,10 +2,10 @@
 
 // basic file operations
 #include <fstream>
+#include <time.h>
 #include "sphere.h"
 #include "hitable_list.h"
 #include "camera.h"
-#include <time.h>
 #include "material.h"
 #include "lambertian.h"
 #include "metal.h"
@@ -87,7 +87,7 @@ int main() {
 
 	int ir, ig, ib;
 
-	///give background fade white to blue upward
+	/// give background fade white to blue upward
 
 	//pixel coordinates
 		//x goes from 0 to 4
@@ -112,6 +112,8 @@ int main() {
 		for (int j = 0; j < width; j++) {
 			vec3 col = vec3(0, 0, 0);
 			for (int s = 0; s < sample_count; s++) {
+
+				/// xPercent = (x_pixel_coord + rand(0 to 1)) / screen_width
 				xPercent = (float(j) + float(rand())/float(RAND_MAX) ) / fWidth;
 				yPercent = (float(i) + float(rand())/float(RAND_MAX) ) / fHeight;
 				//xPercent = (float(j) + dist(e2)) / fWidth;

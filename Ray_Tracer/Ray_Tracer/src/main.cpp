@@ -9,26 +9,26 @@
 #include "metal.h"
 #include "dielectric.h"
 using namespace std;
+// TODO(Mike): phase in std::  over including the whole namespace
 
 inline vec3 giveFadeBlueDownward(const ray& r) {
 	// goal color is vec3(.5, .7, 1.0)	//blue
 	// start is white(1,1,1)
 	// r's original y val goes from -1, 1
-		//+1 then *.5, to go 0-1
-	vec3 unit_direction = unit_vector( r.direction() );
+		// +1 then *.5, to go 0-1
+	vec3 unit_direction = unit_vector(r.direction());
 	float t = 0.5f*(1.0f + unit_direction.y());
 
 	return lerp(vec3(1.0f, 1.0f, 1.0f), vec3(0.5f, 0.7f, 1.0f), t);
 }
 
 inline void print(vec3 in) {
-	cout << "("<<in[0] << ", " << in[1] << ", " << in[2] <<")"<< '\n';
+	cout << "(" << in[0] << ", " << in[1] << ", " << in[2] << ")" << '\n';
 	return;
 }
 int printCount = 41;
 
-
-vec3 color(const ray& r, hitable *world, int reflects_left=25) {
+vec3 color(const ray& r, hitable *world, int reflects_left = 25) {
 	hit_record rec;
 
 	// TODO(Mike): include float.h & init this with MAXFLOAT
@@ -126,10 +126,11 @@ int main() {
 
 	for (int i = height - 1; i >= 0; i--) {
 		for (int j = 0; j < width; j++) {
-			vec3 col = vec3(0, 0, 0);
-			for (int s = 0; s < sample_count; s++) {
+			vec3 col = vec3(0.0f, 0.0f, 0.0f);
 
-				// TODO(Mike): cleanly rewrite with updated float cast 
+			for (int s = 0; s < sample_count; s++) {
+				// TODO(Mike): cleanly rewrite with updated float cast
+				// TODO(Mike): look into rand_r() over rand()
 				/// Percent = (pixel_coord + rand(0 to 1)) / screen_width
 				xPercent = (float(j) + float(rand())/float(RAND_MAX) ) / fWidth;
 				yPercent = (float(i) + float(rand())/float(RAND_MAX) ) / fHeight;

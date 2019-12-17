@@ -1,12 +1,14 @@
 #pragma once
 #include "material.h"
 
+// TODO: document schlick
 float schlick(float cosine, float ref_idx) {
 	float r0 = (1 - ref_idx) / (1 + ref_idx);
 	r0 = r0 * r0;
 	return r0 + (1 - r0)*pow((1 - cosine), 5);
 }
 
+// TODO: document refract_author
 bool refract_author(const vec3& v, const vec3& n, float ni_over_nt, vec3& refracted) {
 	vec3 uv = unit_vector(v);
 	float dt = dot(uv, n);

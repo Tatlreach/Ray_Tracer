@@ -1,14 +1,14 @@
 #pragma once
 #include "material.h"
 
-// TODO: document schlick
+// TODO(Mike): document schlick
 float schlick(float cosine, float ref_idx) {
 	float r0 = (1 - ref_idx) / (1 + ref_idx);
 	r0 = r0 * r0;
 	return r0 + (1 - r0)*pow((1 - cosine), 5);
 }
 
-// TODO: document refract_author
+// TODO(Mike): document refract_author
 bool refract_author(const vec3& v, const vec3& n, float ni_over_nt, vec3& refracted) {
 	vec3 uv = unit_vector(v);
 	float dt = dot(uv, n);
@@ -24,7 +24,7 @@ class dielectric : public material {
 public:
 	float ref_idx;
 
-	//TODO: set a way so blur_in default value removes blur & removes blur computation
+	// TODO(Mike): set a way so blur_in default value removes blur & removes blur computation
 	dielectric(float ref_idx_in) : ref_idx(ref_idx_in) {}
 	virtual bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered) const {
 		vec3 outward_normal;

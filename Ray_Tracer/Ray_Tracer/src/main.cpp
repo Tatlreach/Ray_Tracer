@@ -31,7 +31,7 @@ int printCount = 41;
 vec3 color(const ray& r, hitable *world, int reflects_left=25) {
 	hit_record rec;
 
-	// TODO: include float.h & init this with MAXFLOAT
+	// TODO(Mike): include float.h & init this with MAXFLOAT
 	if (world->hit(r, 0.001, 20000.0, rec)) {
 		vec3 attenuation;
 		ray scatter;
@@ -129,7 +129,7 @@ int main() {
 			vec3 col = vec3(0, 0, 0);
 			for (int s = 0; s < sample_count; s++) {
 
-				// TODO: cleanly rewrite with updated float cast 
+				// TODO(Mike): cleanly rewrite with updated float cast 
 				/// Percent = (pixel_coord + rand(0 to 1)) / screen_width
 				xPercent = (float(j) + float(rand())/float(RAND_MAX) ) / fWidth;
 				yPercent = (float(i) + float(rand())/float(RAND_MAX) ) / fHeight;

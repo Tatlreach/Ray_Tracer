@@ -42,7 +42,7 @@ bool sphere::hit(const ray& r, float dist_min, float dist_max, hit_record& rec) 
 	float surface_dist_from_perpendic = sqrt((radius*radius) - (perpendic_len*perpendic_len));
 
 	rec.dist = dist + (float(is_inside * -1)*surface_dist_from_perpendic);	///get distance from ray origin to sphere surface
-	//TODO: if within sphere rec.dist = dist + hit_dist_from_perpendic?
+	// TODO(Mike): if within sphere rec.dist = dist + hit_dist_from_perpendic?
 
 	look.scale_to(surface_dist_from_perpendic * float(is_inside * -1));
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "hitable.h"
-//#include "ray.h"
+// #include "ray.h"
 
 vec3 reflect(const vec3& reflected, const vec3& normal) {
 	return reflected - 2*(dot(reflected, normal)*normal);

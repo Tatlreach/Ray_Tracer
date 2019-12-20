@@ -1,6 +1,7 @@
 #pragma once
 #include "hitable.h"
 
+/// Contains a list of hitables to be checked against with hit()
 class hitable_list : public hitable {
 public:
 	hitable **list;
@@ -12,14 +13,14 @@ public:
 		list_size = l_size;
 	}
 
-	/// calls hit for all in the list
+	/// Calls hit() against all in the list.
+	/// Writes to 'hit_record' parameter for the closest hit.
 	virtual bool hit(const ray& r, float dist_min, float dist_max, hit_record& rec) const;
 
-	/// calls hit for all in the list
+	/// The author's version of hit()
 	virtual bool hit_author(const ray& r, float dist_min, float dist_max, hit_record& rec) const;
 };
 
-/// author's version of iterating the hitable_list
 bool hitable_list::hit(const ray& r, float dist_min, float dist_max, hit_record& rec) const {
 	bool has_hit = false;
 	hit_record temp_rec;

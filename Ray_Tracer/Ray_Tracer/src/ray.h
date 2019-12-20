@@ -1,10 +1,11 @@
 #pragma once
 #include "vec3.h"
 
+/// Represents a vector(vec3) starting from some other place than (0,0) implicitly
 class ray {
 public:
-	vec3 A;		/// Origin vector
-	vec3 B;		/// Direction vector
+	vec3 A;		/// Origin of the ray
+	vec3 B;		/// Direction of the ray
 
 	ray() {}
 	ray(const vec3& Origin, const vec3& Direction) {

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "hitable.h"
 
 // used for debugging
@@ -8,17 +7,22 @@
 
 class material;
 
+/// Geometric Sphere
 class sphere : public hitable {
 public:
 	// std::ofstream vecLog;
-	vec3 center;
+	vec3 center;	/// location of the sphere
 	float radius;
 	material* mat;
 
 	sphere() {}
 	sphere(vec3 cen, float r, material* mat_in) : center(cen), radius(r), mat(mat_in) {}
 
+	/// Returns whether or not a collision occured.
+	/// If it did, writes a hit_record to "rec" parameter.
 	virtual bool hit(const ray& r, float dist_min, float dist_max, hit_record& rec) const;
+
+	/// The author's version of hit()
 	virtual bool hit_author(const ray& r, float dist_min, float dist_max, hit_record& rec) const;
 
 	// virtual vec3 hit_occured(const ray & r) const;

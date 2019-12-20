@@ -20,6 +20,7 @@ bool refract_author(const vec3& v, const vec3& n, float ni_over_nt, vec3& refrac
 	return false;
 }
 
+/// Determines how light passes through & relfects off a semi-clear material
 class dielectric : public material {
 public:
 	float ref_idx;

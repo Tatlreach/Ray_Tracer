@@ -1,6 +1,7 @@
 #pragma once
 #include <math.h>
 
+/// Stores (x, y, z) or (r, g, b) data & vector operations for that data
 class vec3 {
 public:
 	float e[3];

@@ -11,6 +11,7 @@
 using namespace std;
 // TODO(Mike): phase in std::  over including the whole namespace
 
+/// Generate a color vector between blue-white based on how upward the parameter is facing.
 inline vec3 giveFadeBlueDownward(const ray& r) {
 	// goal color is vec3(.5, .7, 1.0)	//blue
 	// start is white(1,1,1)
@@ -28,14 +29,20 @@ inline void print(vec3 in) {
 }
 int printCount = 41;
 
+/// Return the color of the world from the perspective of the ray parameter
 vec3 color(const ray& r, hitable *world, int reflects_left = 25) {
 	hit_record rec;
 
 	// TODO(Mike): include float.h & init this with MAXFLOAT
+	// check hit / get hit_record from world
 	if (world->hit(r, 0.001, 20000.0, rec)) {
 		vec3 attenuation;
 		ray scatter;
+
+		// call hit_record's own material->scatter() to get attenuation & reflected_ray
 		if ((reflects_left > 0) && rec.mat->scatter(r, rec, attenuation, scatter)) {
+
+			// recursively get color() of reflected_ray & apply attenuation (^gotten in the prev step^)
 			return attenuation * color(scatter, world, reflects_left - 1);
 		}
 		return vec3(0, 0, 0);

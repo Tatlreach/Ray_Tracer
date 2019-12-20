@@ -3,8 +3,8 @@
 
 class ray {
 public:
-	vec3 A;
-	vec3 B;
+	vec3 A;		/// Origin vector
+	vec3 B;		/// Direction vector
 
 	ray() {}
 	ray(const vec3& Origin, const vec3& Direction) {
@@ -15,6 +15,6 @@ public:
 	vec3 origin() const { return A; }
 	vec3 direction() const { return B; }
 
-	/// Traces ray to end & scales direction by t
+	/// Temporarily scales Direction by dist & adds in Origin.
 	vec3 point_at_parameter(float dist) const { return A + (dist*B); }
 };

@@ -48,6 +48,7 @@ public:
 	inline void scale_to(const float len);
 };
 
+/// Reduce (*this) vector's length to 1
 void vec3::make_unit_vector() {
 	(*this) /= length();
 	return;
@@ -76,6 +77,7 @@ inline vec3 operator/(const vec3& v, float t) {
 	return vec3(v[0] / t, v[1] / t, v[2] / t);
 }
 
+/// Scale a vector's length down to 1
 inline vec3 unit_vector(vec3 v) {
 	return  (v / v.length());
 }
@@ -88,6 +90,7 @@ inline vec3 operator-(const vec3& v1, const vec3& v2) {
 	);
 }
 
+/// Linearly interpolate from start-to-end. Take a percentage of that.
 inline vec3 lerp(const vec3& start, const vec3& end, const float percent) {
 	vec3 result(end - start);
 	result *= percent;
@@ -121,10 +124,12 @@ inline vec3 operator*(const vec3& v1, const vec3& v2) {
 
 
 
+/// Return the dot product of paramters
 inline float dot(const vec3& v1, const vec3& v2) {
 	return ((v1[1] * v2[1]) + (v1[2] * v2[2]) + (v1[0] * v2[0]));
 }
 
+/// Generate a cross product vector of paramters.
 inline vec3 cross(const vec3& v1, const vec3& v2) {
 	return vec3(
 		(v1[1] * v2[2]) - (v1[2] * v2[1]),
@@ -200,10 +205,8 @@ inline vec3& vec3::operator-=(const float t) {
 
 // TODO(Mike): integrate rand_r() instead of rand()
 // TODO(Mike): integrate static_cast<float>() over float()
+/// Generate a vector in a random direction(+ or -) with a length 0->radius_max
 inline vec3 random_in_sphere(float radius_max = 1.0f) {
-	// gen a vector with randomized vals -radius to radius
-	// make sure it's a sphere
-	// add it to vector
 	vec3 rand_sphere;
 	do {
 		rand_sphere = vec3(
@@ -217,10 +220,8 @@ inline vec3 random_in_sphere(float radius_max = 1.0f) {
 	return rand_sphere;
 }
 
+/// Generate a vector in a random direction(+ or -) with a length 0->1
 inline vec3 random_in_sphere_author() {
-	// gen a vector with randomized vals -radius to radius
-	// make sure it's a sphere
-	// add it to vector
 	vec3 rand_sphere;
 	do {
 		rand_sphere = vec3(
@@ -228,7 +229,6 @@ inline vec3 random_in_sphere_author() {
 			float(rand()) / float(RAND_MAX),
 			float(rand()) / float(RAND_MAX)
 		);
-		// rand_sphere = vec3(dist(e2), dist(e2), dist(e2));
 		rand_sphere *= 2.0f;
 		rand_sphere -= vec3(1, 1, 1);
 	} while (rand_sphere.length() > 1.0f);

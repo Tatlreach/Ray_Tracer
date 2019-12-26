@@ -138,6 +138,11 @@ int main() {
 			for (int s = 0; s < sample_count; s++) {
 				// TODO(Mike): cleanly rewrite with updated float cast
 				// TODO(Mike): look into rand_r() over rand()
+
+				// Goes from screen pixel coordinates
+				// to screen percentage coordinates
+				// to world vectors protruding out of the screen from camera.origin
+
 				/// Percent = (pixel_coord + rand(0 to 1)) / screen_width
 				xPercent = (float(j) + float(rand())/float(RAND_MAX) ) / fWidth;
 				yPercent = (float(i) + float(rand())/float(RAND_MAX) ) / fHeight;

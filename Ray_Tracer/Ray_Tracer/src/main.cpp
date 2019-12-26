@@ -85,7 +85,7 @@ int main() {
 	float fHeight = static_cast<float>(height);
 
 	camera cam;
-	int sample_count = 100;
+	int sample_count = 10;
 	srand((unsigned int)time(NULL));
 
 	int ir, ig, ib;
@@ -104,27 +104,27 @@ int main() {
 
 	hitable *list[4];
 	list[0] = new sphere(
-		vec3(0.0f, 0.0f, -1.0f),
-		0.5f,
-		new lambertian(vec3(0.1f, 0.2f, 0.5f))
-	);
-
-	list[1] = new sphere(
-		vec3(0.0f, -100.5f, -1.0f),
+		vec3(0.0f, -100.5f, 1.0f),
 		100.0f,
 		new lambertian(vec3(0.8f, 0.8f, 0.0f))
 	);
 
-	list[2] = new sphere(
-		vec3(1.0f, 0.0f, -1.0f),
+	list[1] = new sphere(
+		vec3(-1.0f, 0.0f, 1.0f),
 		0.5f,
-		new metal(vec3(0.8f, 0.6f, 0.2f), 1.0f)
+		new dielectric(1.5f)
+	);
+
+	list[2] = new sphere(
+		vec3(0.0f, 0.0f, 1.0f),
+		0.5f,
+		new lambertian(vec3(0.1f, 0.2f, 0.5f))
 	);
 
 	list[3] = new sphere(
-		vec3(-1.0f, 0.0f, -1.0f),
+		vec3(1.0f, 0.0f, 1.0f),
 		0.5f,
-		new dielectric(1.5f)
+		new metal(vec3(0.8f, 0.6f, 0.2f), 1.0f)
 	);
 
 	// list[4] = new sphere(vec3(-1, 0, -1), -0.45f, new dielectric(1.5));

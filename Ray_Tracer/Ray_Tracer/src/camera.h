@@ -9,7 +9,7 @@ public:
 	vec3 origin;
 
 	camera() {
-		lower_left_corner = vec3(-2.0f, -1.0f, -1.0);
+		lower_left_corner = vec3(-2.0f, -1.0f, 1.0);
 		screen_width = vec3(4.0f, 0.0f, 0.0f);
 		screen_height = vec3(0.0f, 2.0f, 0.0f);
 		origin = vec3(0.0f, 0.0f, 0.0f);

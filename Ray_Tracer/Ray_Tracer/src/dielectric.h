@@ -2,6 +2,8 @@
 #include "material.h"
 
 // TODO(Mike): document schlick
+/// Determines how reflective a surface is at wide angles
+/// e.g. when looking at a window at a wide angle it becomes mirror-like
 float schlick(float cosine, float ref_idx) {
 	float r0 = (1 - ref_idx) / (1 + ref_idx);
 	r0 = r0 * r0;

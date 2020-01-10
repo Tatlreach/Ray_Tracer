@@ -1,5 +1,5 @@
 #include <iostream>
-#include <fstream>	// basic file operations
+#include <fstream>
 #include <time.h>
 #include "sphere.h"
 #include "hitable_list.h"
@@ -34,7 +34,7 @@ vec3 color(const ray& r, hitable *world, int reflects_left = 25) {
 	hit_record rec;
 
 	// TODO(Mike): include float.h & init this with MAXFLOAT
-	// check hit / get hit_record from world
+	// check hit & assign hit_record parameter
 	if (world->hit(r, 0.001, 20000.0, rec)) {
 		vec3 attenuation;
 		ray scatter;
@@ -53,28 +53,6 @@ vec3 color(const ray& r, hitable *world, int reflects_left = 25) {
 
 
 int main() {
-	// collision debugging
-	/*
-	vec3 center(0, -100, -1);
-	ray r(vec3(0,0,0), vec3(-2, 0.48, -1));
-	vec3 perpendic(18, 96, 10);
-	//vec3 look(18, -4, 9);
-	vec3 look(unit_vector(r.direction()));
-
-	float dist = abs(dot(center, look));
-	
-	cout << "dist: " << dist << '\n';
-
-	look *= dist;
-	cout << "look: ";
-	print(look);
-	//(look - relSphereLoc) gives us a vector perpendicular to our ray, from our sphere center
-	perpendic=(look - center);
-	if (perpendic.length() < 100.0f) {
-		cout << "HIT!" << '\n';
-		//return vec3(0, 0, 0);
-	}
-	*/
 
 	ofstream image;
 	image.open("testPPM.ppm");
@@ -89,8 +67,6 @@ int main() {
 	srand((unsigned int)time(NULL));
 
 	int ir, ig, ib;
-
-	/// give background fade white to blue upward
 
 	// pixel coordinates
 		// x goes from 0 to 4
@@ -139,7 +115,7 @@ int main() {
 				// TODO(Mike): cleanly rewrite with updated float cast
 				// TODO(Mike): look into rand_r() over rand()
 
-				// Goes from screen pixel coordinates
+				// Goes from (i,j) screen pixel coordinates
 				// to screen percentage coordinates
 				// to world vectors protruding out of the screen from camera.origin
 

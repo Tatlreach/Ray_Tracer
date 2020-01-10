@@ -1,22 +1,18 @@
 #pragma once
 #include "hitable.h"
 
-// used for debugging
-// #include <iostream>
-// #include <fstream>
-
 class material;
 
 /// Geometric Sphere
 class sphere : public hitable {
 public:
-	// std::ofstream vecLog;
-	vec3 center;	/// location of the sphere
+	vec3 center;	/// location of the sphere center
 	float radius;
 	material* mat;
 
 	sphere() {}
-	sphere(vec3 cen, float r, material* mat_in) : center(cen), radius(r), mat(mat_in) {}
+	sphere(vec3 cen, float radius_in, material* mat_in)
+		: center(cen), radius(radius_in), mat(mat_in) {}
 
 	/// Returns whether or not a collision occured.
 	/// If it did, writes a hit_record to "rec" parameter.
@@ -24,9 +20,6 @@ public:
 
 	/// The author's version of hit()
 	virtual bool hit_author(const ray& r, float dist_min, float dist_max, hit_record& rec) const;
-
-	// virtual vec3 hit_occured(const ray & r) const;
-	// virtual vec3 get_normal(const ray& r, vec3 perpendic, hit_record& rec) const;
 };
 
 bool sphere::hit(const ray& r, float dist_min, float dist_max, hit_record& rec) const {
@@ -37,6 +30,7 @@ bool sphere::hit(const ray& r, float dist_min, float dist_max, hit_record& rec) 
 	if ((dist < dist_min) || (dist > dist_max)) return false;
 
 	look.scale_to(dist);
+
 	// (look - relSphereLoc) gives us a vector perpendicular to our ray, from our sphere center
 	vec3 perpendic(look - relSphereLoc);
 	float perpendic_len = perpendic.length();
@@ -62,7 +56,6 @@ bool sphere::hit(const ray& r, float dist_min, float dist_max, hit_record& rec) 
 	rec.normal.make_unit_vector();
 	rec.mat = mat;
 	return true;
-	// return (perpendic + look);	//return normal;	//return rec.normal;
 }
 
 	/// authors version of hit detection
@@ -91,34 +84,3 @@ bool sphere::hit_author(const ray& r, float dist_min, float dist_max, hit_record
 	}
 	return false;
 }
-
-/*
-vec3 sphere::hit_occured(const ray& r) const {
-	vec3 relSphereLoc(center - r.origin());
-	vec3 look(unit_vector(r.direction()));
-
-	float dist = dot(relSphereLoc, look);
-
-	look *= dist;
-	//(look - relSphereLoc) gives us a vector perpendicular to our ray, from our sphere center
-	vec3 perpendic(look - relSphereLoc);
-	
-	if (perpendic.length() > radius) {
-		return vec3(0, 0, 0);
-	}
-	return perpendic;
-}
-
-inline vec3 sphere::get_normal(const ray & r, vec3 perpendic, hit_record & rec) const
-{
-	vec3 relSphereLoc(center - r.origin());
-	float dist = perpendic.length();
-	vec3 look( unit_vector(r.direction) );
-	look = (-look);
-
-	look *= sqrt((radius*radius) - (dist*dist));
-	rec.p = (perpendic + look) + relSphereLoc + r.origin;
-
-	return vec3();
-}
-*/

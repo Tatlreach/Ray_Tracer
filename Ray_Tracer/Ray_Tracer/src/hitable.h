@@ -22,8 +22,4 @@ public:
 
 	/// the author's version of the hit() function
 	virtual bool hit_author(const ray& r, float dist_min, float dist_max, hit_record& rec) const = 0;
-
-	// depreciated functions
-	// virtual vec3 hit_occured(const ray& r) const = 0;
-	// virtual vec3 get_normal(const ray& r, vec3 perpendic, hit_record& rec) const = 0;
 };

@@ -36,7 +36,6 @@ bool sphere::hit(const ray& r, float dist_min, float dist_max, hit_record& rec) 
 	float perpendic_len = perpendic.length();
 	if (perpendic_len > radius) {
 		return false;
-		// return vec3(0, 0, 0);
 	}
 	
 	bool is_inside = (relSphereLoc.length() < radius);

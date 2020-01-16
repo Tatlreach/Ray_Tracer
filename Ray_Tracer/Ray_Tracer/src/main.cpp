@@ -55,7 +55,7 @@ vec3 color(const ray& r, hitable *world, int reflects_left = 25) {
 int main() {
 
 	ofstream image;
-	image.open("testPPM.ppm");
+	image.open("spheres_image.ppm");
 
 	int width = 200;
 	int height = 100;

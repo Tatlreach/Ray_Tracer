@@ -29,7 +29,6 @@ bool hitable_list::hit(const ray& r, float dist_min, float dist_max, hit_record&
 		// find the closest hit using generated record
 	for (int i = 0; i < list_size; i++) {
 		if (list[i]->hit_author(r, dist_min, dist_max, temp_rec)) {
-			// list[i]->get_normal(r, temp_vec, temp_rec);
 			if (!has_hit || (temp_rec.dist < rec.dist)) {
 				rec = temp_rec;
 			}
@@ -43,6 +42,7 @@ bool hitable_list::hit_author(const ray& r, float dist_min, float dist_max, hit_
 	return hit(r, dist_min, dist_max, rec);
 }
 
+/// legacy
 /// my version of iterating the hitable_list
 /*
 bool hitable_list::hit(const ray& r, float dist_min, float dist_max, hit_record& rec) {
@@ -64,7 +64,7 @@ bool hitable_list::hit(const ray& r, float dist_min, float dist_max, hit_record&
 				//if less than, set the outgoing record to it
 
 			list[i]->get_normal(r, temp_vec, temp_rec);
-			if (!has_hit || (temp_rec.dist<rec.dist)) {
+			if (!has_hit || (temp_rec.dist < rec.dist)) {
 				rec = temp_rec;
 				min_dist = temp_rec.dist;
 			}
@@ -73,7 +73,5 @@ bool hitable_list::hit(const ray& r, float dist_min, float dist_max, hit_record&
 	}
 
 	return has_hit;
-
-
 }
 */

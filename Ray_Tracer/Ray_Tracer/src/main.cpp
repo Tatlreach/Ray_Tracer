@@ -35,7 +35,7 @@ vec3 color(const ray& r, hitable *world, int reflects_left = 25) {
 
 	// TODO(Mike): include float.h & init this with MAXFLOAT
 	// check hit & assign hit_record parameter
-	if (world->hit(r, 0.001, 20000.0, rec)) {
+	if (world->hit(r, 0.001f, 20000.0f, rec)) {
 		vec3 attenuation;
 		ray scatter;
 
@@ -62,7 +62,7 @@ int main() {
 	float fWidth = static_cast<float>(width);
 	float fHeight = static_cast<float>(height);
 
-	camera cam;
+	camera cam(vec3(-2, 2, -1), vec3(0, 0, 1), vec3(0, 1, 0), 45, fWidth / fHeight);
 	int sample_count = 10;
 	srand((unsigned int)time(NULL));
 

@@ -10,6 +10,7 @@ public:
 	vec3 screen_height;		/// height_scaler
 	vec3 origin;
 	 
+	/// camera with default position & orientation
 	camera() {
 		lower_left_corner = vec3(-2.0f, -1.0f, -1.0);
 		screen_width = vec3(4.0f, 0.0f, 0.0f);

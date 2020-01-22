@@ -11,6 +11,10 @@
 using namespace std;
 // TODO(Mike): phase in std::  over including the whole namespace
 
+inline float zero_to_one() {
+	return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+}
+
 /// Generate a color vector between blue-white based on how upward the parameter is facing.
 inline vec3 giveFadeBlueDownward(const ray& r) {
 	// goal color is vec3(.5, .7, 1.0)	//blue
@@ -51,6 +55,35 @@ vec3 color(const ray& r, hitable *world, int reflects_left = 25) {
 	}
 }
 
+inline hitable *default_scene() {
+	hitable **list = new hitable*[4];
+	list[0] = new sphere(
+		vec3(0.0f, -100.5f, -1.0f),
+		100.0f,
+		new lambertian(vec3(0.8f, 0.8f, 0.0f))
+	);
+
+	list[1] = new sphere(
+		vec3(-1.0f, 0.0f, -1.0f),
+		0.5f,
+		new dielectric(1.5f)
+	);
+
+	list[2] = new sphere(
+		vec3(0.0f, 0.0f, -1.0f),
+		0.5f,
+		new lambertian(vec3(0.1f, 0.2f, 0.5f))
+	);
+
+	list[3] = new sphere(
+		vec3(1.0f, 0.0f, -1.0f),
+		0.5f,
+		new metal(vec3(0.8f, 0.6f, 0.2f), 1.0f)
+	);
+
+	return new hitable_list(list, 4);
+}
+
 
 int main() {
 
@@ -62,8 +95,10 @@ int main() {
 	float fWidth = static_cast<float>(width);
 	float fHeight = static_cast<float>(height);
 
-	camera cam(vec3(-2, 2, -1), vec3(0, 0, 1), vec3(0, 1, 0), 45, fWidth / fHeight);
-	int sample_count = 10;
+	// camera cam;
+	camera cam(vec3(-2, 2, 1), vec3(0, 0, -1), vec3(0, 1, 0), 45, fWidth / fHeight);
+	// camera cam(vec3(0, 0, 0), vec3(0, 0, -1), vec3(0, 1, 0), 90, fWidth / fHeight);
+	int sample_count = 5;
 	srand((unsigned int)time(NULL));
 
 	int ir, ig, ib;
@@ -78,34 +113,7 @@ int main() {
 	float xPercent;
 	float yPercent;
 
-	hitable *list[4];
-	list[0] = new sphere(
-		vec3(0.0f, -100.5f, 1.0f),
-		100.0f,
-		new lambertian(vec3(0.8f, 0.8f, 0.0f))
-	);
-
-	list[1] = new sphere(
-		vec3(-1.0f, 0.0f, 1.0f),
-		0.5f,
-		new dielectric(1.5f)
-	);
-
-	list[2] = new sphere(
-		vec3(0.0f, 0.0f, 1.0f),
-		0.5f,
-		new lambertian(vec3(0.1f, 0.2f, 0.5f))
-	);
-
-	list[3] = new sphere(
-		vec3(1.0f, 0.0f, 1.0f),
-		0.5f,
-		new metal(vec3(0.8f, 0.6f, 0.2f), 1.0f)
-	);
-
-	// list[4] = new sphere(vec3(-1, 0, -1), -0.45f, new dielectric(1.5));
-
-	hitable* world = new hitable_list(list, 4);
+	hitable* world = default_scene();
 
 	for (int i = height - 1; i >= 0; i--) {
 		for (int j = 0; j < width; j++) {
@@ -120,8 +128,8 @@ int main() {
 				// to world vectors protruding out of the screen from camera.origin
 
 				/// Percent = (pixel_coord + rand(0 to 1)) / screen_width
-				xPercent = (float(j) + float(rand())/float(RAND_MAX) ) / fWidth;
-				yPercent = (float(i) + float(rand())/float(RAND_MAX) ) / fHeight;
+				xPercent = (static_cast<float>(j) + zero_to_one()) / fWidth;
+				yPercent = (static_cast<float>(i) + zero_to_one()) / fHeight;
 				ray r = cam.get_ray(xPercent, yPercent);
 				col += color(r, world);
 			}

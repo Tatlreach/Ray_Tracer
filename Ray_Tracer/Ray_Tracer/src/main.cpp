@@ -84,6 +84,71 @@ inline hitable *default_scene() {
 	return new hitable_list(list, 4);
 }
 
+inline hitable *random_scene() {
+	int small_orb_cnt = 405;
+	hitable **list = new hitable*[small_orb_cnt];
+	list[0] = new sphere(
+		vec3(0.0f, -1000.0f, -0.0f),
+		1000.0f,
+		new lambertian(vec3(0.5f, 0.5f, 0.5f))
+	);
+	int i = 1;
+	int area = 6;
+	for (int a = -area; a < area; ++a) {
+		for (int b = -area; b < area; ++b) {
+			float choose_mat = zero_to_one();
+			vec3 center(a + 0.9f*zero_to_one(), 0.2, b + 0.9f*zero_to_one());
+			if ((center - vec3(4, 0.2f, 0)).length() > 0.9f) {
+				if(choose_mat < 0.8f) { //diffuse
+					vec3 rand_vec = vec3(
+						zero_to_one()*zero_to_one(),
+						zero_to_one()*zero_to_one(),
+						zero_to_one()*zero_to_one()
+					);
+					list[i++] = new sphere(
+						center,
+						0.2f,
+						new lambertian(rand_vec)
+					);
+				} else if (choose_mat < 0.95f) { //metal
+					vec3 metal_color = vec3(
+						0.5f*(1 + zero_to_one()),
+						0.5f*(1 + zero_to_one()),
+						0.5f*(1 + zero_to_one())
+					);
+					list[i++] = new sphere(
+						center,
+						0.2f,
+						new metal(metal_color)
+					);
+				} else { //glass
+					list[i++] = new sphere(center, 0.2f, new dielectric(1.5));
+				}
+			}
+		}
+	}
+
+	list[i++] = new sphere(
+		vec3(-4.0f, 1.0f, 0.0f),
+		1.0f,
+		new lambertian(vec3(0.4f, 0.2f, 0.1f))
+	);
+
+	list[i++] = new sphere(
+		vec3(0.0f, 1.0f, 0.0f),
+		1.0f,
+		new dielectric(1.5f)
+	);
+
+	list[i++] = new sphere(
+		vec3(4.0f, 1.0f, 0.0f),
+		1.0f,
+		new metal(vec3(0.7f, 0.6f, 0.5f), 0.0f)
+	);
+
+	return new hitable_list(list, i);
+}
+
 
 int main() {
 
@@ -96,9 +161,12 @@ int main() {
 	float fHeight = static_cast<float>(height);
 
 	// camera cam;
-	camera cam(vec3(-2, 2, 1), vec3(0, 0, -1), vec3(0, 1, 0), 45, fWidth / fHeight);
+	vec3 lookfrom(vec3(9.5f, 2.0f, -2.5f));
+	vec3 lookat(vec3(0.0f, 0.0f, 0.0f));
+	camera cam(lookfrom, lookat, vec3(0, 1, 0), 21, fWidth / fHeight);
+	// camera cam(vec3(-2, 2, 1), vec3(0, 0, -1), vec3(0, 1, 0), 90, fWidth / fHeight);
 	// camera cam(vec3(0, 0, 0), vec3(0, 0, -1), vec3(0, 1, 0), 90, fWidth / fHeight);
-	int sample_count = 5;
+	int sample_count = 4;
 	srand((unsigned int)time(NULL));
 
 	int ir, ig, ib;
@@ -110,10 +178,10 @@ int main() {
 
 	image << "P3\n" << width << " " << height << "\n255\n";
 
+	hitable* world = random_scene();
+
 	float xPercent;
 	float yPercent;
-
-	hitable* world = default_scene();
 
 	for (int i = height - 1; i >= 0; i--) {
 		for (int j = 0; j < width; j++) {

@@ -97,7 +97,7 @@ inline hitable *random_scene() {
 	for (int a = -area; a < area; ++a) {
 		for (int b = -area; b < area; ++b) {
 			float choose_mat = zero_to_one();
-			vec3 center(a + 0.9f*zero_to_one(), 0.2, b + 0.9f*zero_to_one());
+			vec3 center(a + 0.9f*zero_to_one(), 0.2f, b + 0.9f*zero_to_one());
 			if ((center - vec3(4, 0.2f, 0)).length() > 0.9f) {
 				if(choose_mat < 0.8f) { //diffuse
 					vec3 rand_vec = vec3(
